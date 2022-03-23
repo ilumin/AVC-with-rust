@@ -6,11 +6,11 @@ pub fn read(filename: &str) -> String {
     Ok(mut file) => {
       let mut content = String::new();
       file.read_to_string(&mut content).unwrap();
-      return content;
+      content
     }
     Err(error) => {
       println!("Error opening file {}: {}", filename, error);
-      return "".to_string();
+      String::from("")
     }
   }
 }
