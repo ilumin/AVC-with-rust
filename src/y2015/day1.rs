@@ -1,10 +1,23 @@
-pub fn answer(input: &str) -> isize {
-  let total_size = input.chars().count() as isize;
-  let down_size = input.replace("(", "").chars().count() as isize;
-  let up_size = total_size - down_size;
-  let direction = up_size - down_size;
+fn tick(input: char) -> isize {
+  match input {
+    '(' => 1,
+    ')' => -1,
+    _ => 0
+  }
+}
 
-  direction.try_into().unwrap()
+pub fn answer(input: &str, checkBasement: bool) -> isize {
+  let mut direction: isize = 0;
+
+  for (index, c) in input.chars().enumerate() {
+    direction = direction + tick(c);
+    
+    if direction == -1 && checkBasement {
+      return index as isize;
+    }
+  }
+
+  direction
 }
 
 #[cfg(test)]
@@ -14,20 +27,26 @@ mod tests {
 
   #[test]
   fn validate() {
-    assert_eq!(answer("(())"), 0);
-    assert_eq!(answer("()()"), 0);
-    assert_eq!(answer("((("), 3);
-    assert_eq!(answer("(()(()("), 3);
-    assert_eq!(answer("))((((("), 3);
-    assert_eq!(answer("())"), -1);
-    assert_eq!(answer("))("), -1);
-    assert_eq!(answer(")))"), -3);
-    assert_eq!(answer(")())())"), -3);
+    assert_eq!(answer("(())", false), 0);
+    assert_eq!(answer("()()", false), 0);
+    assert_eq!(answer("(((", false), 3);
+    assert_eq!(answer("(()(()(", false), 3);
+    assert_eq!(answer("))(((((", false), 3);
+    assert_eq!(answer("())", false), -1);
+    assert_eq!(answer("))(", false), -1);
+    assert_eq!(answer(")))", false), -3);
+    assert_eq!(answer(")())())", false), -3);
   }
 
   #[test]
-  fn get_answer() {
+  fn part_1() {
     let input = read("./src/y2015/day1.txt");
-    assert_eq!(answer(&input), 232);
+    assert_eq!(answer(&input, false), 232);
+  }
+
+  #[test]
+  fn part_2() {
+    let input = read("./src/y2015/day1.txt");
+    assert_eq!(answer(&input, true), 1782);
   }
 }
