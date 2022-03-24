@@ -6,13 +6,13 @@ fn tick(input: char) -> isize {
   }
 }
 
-pub fn answer(input: &str, checkBasement: bool) -> isize {
+pub fn answer(input: &str, check_basement: bool) -> isize {
   let mut direction: isize = 0;
 
   for (index, c) in input.chars().enumerate() {
     direction = direction + tick(c);
     
-    if direction == -1 && checkBasement {
+    if direction == -1 && check_basement {
       return index as isize;
     }
   }
